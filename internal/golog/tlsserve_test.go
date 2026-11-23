@@ -11,9 +11,15 @@ import (
 	"math/big"
 	"os"
 	"path/filepath"
+	"sync/atomic"
 	"testing"
 	"time"
 )
+
+// certSerial hands out distinct serial numbers: the clock alone is not enough,
+// on Windows time.Now() ticks in ~0.5 ms steps so two certificates made in a row
+// got the same serial and a "good" certificate looked revoked.
+var certSerial atomic.Int64
 
 func mkCert(t *testing.T, cn string, parent *x509.Certificate, parentKey *ecdsa.PrivateKey, isCA bool) (*x509.Certificate, *ecdsa.PrivateKey, []byte) {
 	t.Helper()
@@ -22,7 +28,7 @@ func mkCert(t *testing.T, cn string, parent *x509.Certificate, parentKey *ecdsa.
 		t.Fatal(err)
 	}
 	tpl := &x509.Certificate{
-		SerialNumber:          big.NewInt(time.Now().UnixNano()),
+		SerialNumber:          big.NewInt(time.Now().UnixNano() + certSerial.Add(1)),
 		Subject:               pkix.Name{CommonName: cn},
 		NotBefore:             time.Now().Add(-time.Hour),
 		NotAfter:              time.Now().Add(time.Hour),
