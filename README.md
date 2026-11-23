@@ -1,3 +1,5 @@
+<p align="center"><img src="docs/images/logo.svg" alt="golog" width="240"></p>
+
 # golog
 
 [![CI](https://img.shields.io/github/actions/workflow/status/samuraiii/golog/ci.yml?branch=main&label=CI)](https://github.com/samuraiii/golog/actions/workflows/ci.yml)
