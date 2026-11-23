@@ -1,11 +1,6 @@
 # Character sets and encodings in golog
 
-**Status: this documentation describes code that has never been compiled.** The
-encoding batch (`internal/golog/encoding.go`, `encoding_util.go`, `legacy.go`,
-`legacy_write.go`, `cmd/gologd/convert.go`, the tests) was written against the
-declarations in the tree by static reading only; no `go build`, `go vet` or
-`go test` was ever run on it. See `MERGE-NOTES.md` for the list of integration
-edits a human has to make and for the doubts about compilation.
+**Status:** implemented and tested (`internal/golog/encoding*.go`, `legacy*.go`, `cmd/gologd/convert.go`). Run `gologd convert -h` for the current options.
 
 ---
 
