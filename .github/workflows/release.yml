@@ -1,0 +1,57 @@
+name: Release
+
+# Cross-builds happen only for version tags (v*).
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: build ${{ matrix.goos }}/${{ matrix.goarch }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        goos: [linux, windows]
+        goarch: ['386', amd64, arm64]
+    env:
+      CGO_ENABLED: '0'
+      GOOS: ${{ matrix.goos }}
+      GOARCH: ${{ matrix.goarch }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - name: test (native only)
+        if: matrix.goarch == 'amd64' && matrix.goos == 'linux'
+        run: env -u GOOS -u GOARCH go test ./...
+      - name: build
+        run: |
+          ext=""
+          if test "windows" = "${GOOS}"; then ext=".exe"; fi
+          mkdir -p dist
+          go build -trimpath -ldflags='-s -w' -o "dist/gologd-${GOOS}-${GOARCH}${ext}" ./cmd/gologd
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gologd-${{ matrix.goos }}-${{ matrix.goarch }}
+          path: dist/*
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+      - name: checksums
+        run: cd dist && sha256sum gologd-* > SHA256SUMS
+      - name: publish
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" dist/* \
+            --repo "${GITHUB_REPOSITORY}" --title "${GITHUB_REF_NAME}" --generate-notes
