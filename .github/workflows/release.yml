@@ -34,7 +34,7 @@ jobs:
           if test "windows" = "${GOOS}"; then ext=".exe"; fi
           mkdir -p dist
           go build -trimpath -ldflags='-s -w' -o "dist/gologd-${GOOS}-${GOARCH}${ext}" ./cmd/gologd
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: gologd-${{ matrix.goos }}-${{ matrix.goarch }}
           path: dist/*
