@@ -1,5 +1,12 @@
 # golog
 
+[![CI](https://img.shields.io/github/actions/workflow/status/samuraiii/golog/ci.yml?branch=main&label=CI)](https://github.com/samuraiii/golog/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/samuraiii/golog?include_prereleases)](https://github.com/samuraiii/golog/releases)
+[![Go version](https://img.shields.io/github/go-mod/go-version/samuraiii/golog)](go.mod)
+[![Platforms](https://img.shields.io/badge/platforms-linux%20%7C%20windows-blue)](#building-and-testing)
+[![License: GPL v2](https://img.shields.io/github/license/samuraiii/golog)](COPYING)
+[![Issues](https://img.shields.io/github/issues/samuraiii/golog)](https://github.com/samuraiii/golog/issues)
+
 A from-scratch rewrite of [ELOG](https://elog.psi.ch/elog) (`elogd`), the
 electronic logbook server, in Go. It keeps ELOG's configuration file format,
 on-disk message format and HTTP/URL interface, so existing logbooks and
