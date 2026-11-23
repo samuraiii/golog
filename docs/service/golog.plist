@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- /Library/LaunchDaemons/cz.golog.plist (macOS launchd) -->
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0"><dict>
+  <key>Label</key><string>cz.golog</string>
+  <key>ProgramArguments</key><array>
+    <string>/usr/local/bin/gologd</string><string>-c</string><string>/usr/local/etc/golog.cfg</string>
+    <string>-p</string><string>8080</string><string>-S</string>
+  </array>
+  <key>RunAtLoad</key><true/>
+  <key>KeepAlive</key><true/>
+  <key>StandardErrorPath</key><string>/var/log/golog.log</string>
+</dict></plist>

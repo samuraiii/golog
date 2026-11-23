@@ -26,3 +26,21 @@ RSS text truncation, a stack buffer overflow).
 ELOG is licensed under the GNU General Public License, version 2. golog, as a
 derivative work, is distributed under the same terms: see [COPYING](COPYING).
 There is no warranty.
+
+## Status of this tree
+
+Builds for linux 386/amd64/arm64 and windows 386/amd64/arm64. Implemented and
+checked by hand: HTTPS with the full certificate chain, TLS 1.2+ only, HTTP/2,
+client certificates with CA directories and CRLs, graceful shutdown, systemd
+notification, Windows service, log targets (file, syslog, journal, Event Log),
+legacy-codepage reading with on-the-fly UTF-8, LDAP/AD login, OpenID Connect SSO (`docs/oidc.md`), fail2ban-style
+login bans. Not implemented: remote synchronisation (`-C`, `-m`, `-M`), QUIC /
+HTTP/3, Kerberos and PAM (use the header or external-helper authentication).
+Service files for systemd, OpenRC, sysv, FreeBSD, launchd and Windows are in
+`docs/service/`.
+
+## Acknowledgements
+
+Many thanks to [MetaCentrum](https://metacentrum.cz/) for the LLM service used for the AI-assisted development of golog.
+
+golog was developed with [Claude Code](https://claude.com/claude-code) (Anthropic's Claude), which wrote, merged and fixed much of the code under the direction of the maintainer.

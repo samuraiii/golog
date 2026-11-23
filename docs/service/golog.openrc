@@ -1,0 +1,22 @@
+#!/sbin/openrc-run
+# /etc/init.d/golog (OpenRC, Gentoo/Alpine)
+description="golog logbook server (ELOG compatible)"
+command="/usr/local/bin/gologd"
+command_args="-c /etc/golog/golog.cfg -p 8080 -S"
+command_user="golog:golog"
+command_background=true
+pidfile="/run/golog.pid"
+output_log="/var/log/golog/golog.log"
+error_log="/var/log/golog/golog.log"
+retry="TERM/30/KILL/5"
+
+depend() {
+	need net
+	after firewall
+}
+
+reload() {
+	ebegin "Reloading ${RC_SVCNAME} certificates"
+	start-stop-daemon --signal HUP --pidfile "${pidfile}"
+	eend $?
+}

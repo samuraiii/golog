@@ -1,0 +1,18 @@
+#!/bin/sh
+# /usr/local/etc/rc.d/golog (FreeBSD)
+# PROVIDE: golog
+# REQUIRE: NETWORKING
+# KEYWORD: shutdown
+. /etc/rc.subr
+name=golog
+rcvar=golog_enable
+command=/usr/sbin/daemon
+pidfile=/var/run/golog.pid
+golog_user=golog
+command_args="-P ${pidfile} -r -f /usr/local/bin/gologd -c /usr/local/etc/golog.cfg -p 8080 -S"
+extra_commands=reload
+reload_cmd="golog_reload"
+golog_reload() { kill -HUP "$(cat ${pidfile})"; }
+load_rc_config $name
+: ${golog_enable:=NO}
+run_rc_command "$1"

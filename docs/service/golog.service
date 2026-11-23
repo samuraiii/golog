@@ -1,0 +1,47 @@
+# /etc/systemd/system/golog.service
+# golog is a Go rewrite of ELOG (https://elog.psi.ch/elog) by Stefan Ritt (PSI).
+[Unit]
+Description=golog logbook server (ELOG compatible)
+Documentation=https://github.com/samuraiii/golog
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+# gologd sends READY=1 when it listens, STOPPING=1 at shutdown and watchdog pings.
+Type=notify
+NotifyAccess=main
+WatchdogSec=60
+User=golog
+Group=golog
+ExecStart=/usr/local/bin/gologd -c /etc/golog/golog.cfg -p 8080 -S
+# SIGHUP re-reads the TLS certificate (certificate files are also watched).
+ExecReload=/bin/kill -HUP $MAINPID
+KillSignal=SIGTERM
+TimeoutStopSec=30
+Restart=on-failure
+RestartSec=5
+
+# Listening on ports below 1024 without root:
+# AmbientCapabilities=CAP_NET_BIND_SERVICE
+# CapabilityBoundingSet=CAP_NET_BIND_SERVICE
+
+# Hardening: the daemon needs to write only its logbook directory.
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+RestrictNamespaces=yes
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+SystemCallArchitectures=native
+ReadWritePaths=/var/lib/golog /var/log/golog
+ReadOnlyPaths=/etc/golog
+
+[Install]
+WantedBy=multi-user.target
